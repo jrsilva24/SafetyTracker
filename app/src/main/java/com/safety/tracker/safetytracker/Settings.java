@@ -51,6 +51,7 @@ public class Settings extends AppCompatActivity {
             public void onClick(View v)  {
                 try {
                     name.getText();
+                    
                     phoneNumber.getText();
                 } catch (Exception e) {
                     e.printStackTrace();
