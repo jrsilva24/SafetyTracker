@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
     <Button
-        android:id="@+id/angry_btn"
+        android:id="@+id/settings"
 
         android:text="Settings"
         android:textColor="#FFFFFF"

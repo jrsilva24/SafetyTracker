@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,7 +17,7 @@
     <Button
         android:id="@+id/angry_btn"
 
-        android:text="Calibrating"
+        android:text="End Trip"
         android:textColor="#FFFFFF"
         android:textSize="30sp"
 
@@ -33,39 +34,16 @@
         android:layout_marginBottom="65dp" />
 
     <TextView
+        android:id="@+id/force"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="XValue"
-        android:id="@+id/x"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/angry_btn"
-        android:layout_alignStart="@+id/angry_btn"
-        android:layout_marginTop="32dp"
-        android:textColor="#ffffff"
-        android:textSize="20dp" />
+        android:text="Calibrating"
+        android:textColor="@color/colorAccent"
+        android:textSize="50dp"
+        android:layout_above="@+id/angry_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="168dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="YValue"
-        android:id="@+id/y"
-        android:layout_below="@+id/x"
-        android:layout_alignLeft="@+id/x"
-        android:layout_alignStart="@+id/x"
-        android:layout_marginTop="34dp"
-        android:textColor="#ffffff"
-        android:textSize="20dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ZValue"
-        android:id="@+id/z"
-        android:layout_below="@+id/y"
-        android:layout_alignLeft="@+id/y"
-        android:layout_alignStart="@+id/y"
-        android:layout_marginTop="34dp"
-        android:textColor="#ffffff"
-        android:textSize="20dp" />
 
 </RelativeLayout>

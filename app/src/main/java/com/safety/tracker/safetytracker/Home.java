@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 public class Home extends AppCompatActivity {
@@ -26,14 +27,18 @@ public class Home extends AppCompatActivity {
                 }
             }
         });
+        Button settings = (Button) findViewById(R.id.settings);
+        settings.setOnClickListener(new View.OnClickListener()   {
+            public void onClick(View v)  {
+                try {
+                    Intent i = new Intent(Home.this, Settings.class);
+                    startActivity(i);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
-    }
-
-    public void onButtonClick(View v){
-        if(v.getId() == R.id.button_testplaygrounc){
-            Intent i = new Intent(Home.this, Tracker.class);
-            startActivity(i);
-        }
     }
 
     @Override

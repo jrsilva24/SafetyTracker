@@ -7,7 +7,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by jsilv on 8/10/2016.
@@ -30,12 +35,12 @@ public class Tracker extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor sensor;
     private int calibrationCounter;
-    private float xCalibrationValue;
-    private float yCalibrationValue;
-    private float zCalibrationValue;
+    private float CalibrationValue;
     private boolean calibrated;
+    private double force;
     private StringBuilder stringbuilder;
     private int infractionCounter;
+    private SensorEventListener sensorEventListener;
 // adds 9 character string at beginning
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -49,9 +54,9 @@ public class Tracker extends Activity implements SensorEventListener {
 
         calibrated = false;
         calibrationCounter = 0;
-        xCalibrationValue = 0;
-        yCalibrationValue = 0;
-        zCalibrationValue = 0;
+        CalibrationValue = 0;
+        sensorEventListener = this;
+
         stringbuilder = new StringBuilder();
         infractionCounter = 0;
 
@@ -59,12 +64,35 @@ public class Tracker extends Activity implements SensorEventListener {
 
         if (sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null) {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
         }
+
+        Button endTrip = (Button)findViewById(R.id.angry_btn);
+        endTrip.setOnClickListener(new View.OnClickListener()   {
+            public void onClick(View v)  {
+                try {
+                    endTripAndGenerateReport();
+                    sensorManager.unregisterListener(sensorEventListener,sensor);
+                    finish();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+    private void endTripAndGenerateReport(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String currentDateandTime = sdf.format(new Date());
+        String summary = "Total number of infractions made on " +currentDateandTime+ " were " + infractionCounter;
+       // openFile(summary);
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage("9092007064", null, summary, null, null);
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -75,31 +103,26 @@ public class Tracker extends Activity implements SensorEventListener {
             float y = accelerationVector[1];
             float z = accelerationVector[2];
 
-            if (!calibrated)
+            if (!calibrated) {
                 calibrationSet(x, y, z);
+                if(calibrationCounter % 20 == 0){
+                    TextView forceTextThatIsCalbrationNow = (TextView) findViewById(R.id.force);
+                    forceTextThatIsCalbrationNow.setText(forceTextThatIsCalbrationNow.getText() +".");
+                }
+            }
             else
-                analyzeValues(x - xCalibrationValue, y - yCalibrationValue, z - zCalibrationValue);
+                analyzeValues(x, y , z );
 
-
-            TextView xText = (TextView) findViewById(R.id.x);
-            TextView yText = (TextView) findViewById(R.id.y);
-            TextView zText = (TextView) findViewById(R.id.z);
-            xText.setText(x - xCalibrationValue + "");
-            yText.setText(y - yCalibrationValue + "");
-            zText.setText(z - zCalibrationValue + "");
         }
     }
 
     private void calibrationSet(float x, float y, float z) {
-        xCalibrationValue += x;
-        yCalibrationValue += y;
-        zCalibrationValue += z;
+        calibrationCounter++;
+        CalibrationValue += calculateForce(x,y,z);
 
-        if (calibrationCounter++ == 100) {
+        if (calibrationCounter == 100) {
             calibrated = true;
-            xCalibrationValue = xCalibrationValue / 100;
-            yCalibrationValue = yCalibrationValue / 100;
-            zCalibrationValue = zCalibrationValue / 100;
+            CalibrationValue = CalibrationValue / 100;
             Toast.makeText(this, "Calibration Complete!",
                     Toast.LENGTH_LONG).show();
         }
@@ -112,20 +135,22 @@ public class Tracker extends Activity implements SensorEventListener {
     }
     private void registerInfraction() {
         Toast.makeText(this, "Infraction Occured!",
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_SHORT).show();
         infractionCounter++;
     }
 
     private boolean analyzeInfraction(float x, float y, float z){
-        double force = calculateForce (x,y,z);
+        force = calculateForce (x,y,z) - CalibrationValue;
+        TextView forceText = (TextView) findViewById(R.id.force);
+        forceText.setText(force + " m/s");
         return determineIfInfractionOccured(force);
     }
 
     private boolean determineIfInfractionOccured(double force){
-        return force > 1.0;
+        return force > 5.0;
     }
 
-    private double calculateForce(float x,float y, float z){
+    private double calculateForce(  float x,float y, float z){
         float xSquared = x * x;
         float ySquared = y * y;
         float zSquared = z * z;
@@ -136,10 +161,10 @@ public class Tracker extends Activity implements SensorEventListener {
         return rootValue;
     }
 
-    private void openFile() {
+    private void openFile(String summary) {
         try {
             // catches IOException below
-            final String TESTSTRING = new String("Hello Android");
+            final String TESTSTRING = new String(summary);
 
        /* We have to use the openFileOutput()-method
        * the ActivityContext provides, to
@@ -147,7 +172,7 @@ public class Tracker extends Activity implements SensorEventListener {
        * This is done for security-reasons.
        * We chose MODE_WORLD_READABLE, because
        *  we have nothing to hide in our file */
-            FileOutputStream fOut = openFileOutput("samplefile.txt",
+            FileOutputStream fOut = openFileOutput("safetyTracker.txt",
                     MODE_WORLD_READABLE);
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
 
@@ -166,7 +191,7 @@ public class Tracker extends Activity implements SensorEventListener {
         * Again for security reasons with
         * openFileInput(...) */
 
-            FileInputStream fIn = openFileInput("samplefile.txt");
+            FileInputStream fIn = openFileInput("safetyTracker.txt");
             InputStreamReader isr = new InputStreamReader(fIn);
 
         /* Prepare a char-Array that will

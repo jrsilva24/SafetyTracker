@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">SafetyTracker</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="legal_AgreementText">You agree by using this app to continue
+        to abide by the rules of the road. Using this application by no means
+        allows you to start driving recklessly and endanger the lives of others or
+        yourself. The purpose of this application is merely to assist you in
+        becoming a better, safer driver.Disclaimer :This app is not for use while operating
+        a vehicle. You, the user, are solely responsible for any situation that
+        may occur while operating a vehicle and using SafetyTracker. This app
+        is designed for use before and/or after operating a vehicle. Use extreme
+        caution while operating a vehicle. Always pay attention to the road and
+        please do not text and drive. It can wait.Privacy We will not provide any of your information
+        to third parties. Your information is solely used to provide you with a
+        better experience using our application.</string>
 </resources>

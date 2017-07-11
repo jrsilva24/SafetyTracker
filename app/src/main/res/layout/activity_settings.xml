@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/switchForTexting"
+        android:layout_alignLeft="@+id/NameText"
+        android:layout_alignRight="@+id/switchForTexting"
+        android:layout_alignStart="@+id/NameText"
+        android:layout_below="@+id/NameText"
+        android:layout_marginTop="31dp"
+        android:ems="10"
+        android:hint="Johnny Lamb"
+        android:inputType="text"
+        android:textSize="28dp" />
+
+    <TextView
+        android:id="@+id/PhoneView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone Number :"
+        android:textSize="28dp"
+        tools:text="Phone Number :"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/editText"
+        android:layout_alignStart="@+id/editText"
+        android:layout_alignRight="@+id/NameText"
+        android:layout_alignEnd="@+id/NameText" />
+
+    <TextView
+        android:id="@+id/Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="83dp"
+        android:text="Send Report"
+        android:textSize="28dp"
+        tools:text="Send Report" />
+
+    <EditText
+        android:id="@+id/PhoneNumberInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:ems="10"
+        android:textSize="28dp"
+        android:hint="888 888 8888"
+        android:inputType="phone"
+        android:layout_below="@+id/PhoneView"
+        android:layout_alignLeft="@+id/editText"
+        android:layout_alignStart="@+id/editText"
+        android:layout_alignRight="@+id/editText"
+        android:layout_alignEnd="@+id/editText" />
+
+    <TextView
+        android:id="@+id/NameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First/Last :"
+        android:textSize="28dp"
+        tools:text="Phone Number :"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/switchForTexting"
+        android:layout_alignLeft="@+id/Switch"
+        android:layout_alignStart="@+id/Switch" />
+
+    <Switch
+        android:id="@+id/switchForTexting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Text"
+        android:layout_alignBaseline="@+id/Switch"
+        android:layout_alignBottom="@+id/Switch"
+        android:layout_toRightOf="@+id/NameText"
+        android:layout_toEndOf="@+id/NameText"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp" />
+
+    <Button
+        android:id="@+id/Save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/PhoneNumberInput"
+        android:layout_alignRight="@+id/PhoneNumberInput"
+        android:layout_below="@+id/PhoneNumberInput"
+        android:layout_marginTop="53dp"
+        android:layout_toEndOf="@+id/Switch"
+        android:layout_toRightOf="@+id/Switch"
+        android:text="Save"
+        tools:text="Save" />
+
+</RelativeLayout>
