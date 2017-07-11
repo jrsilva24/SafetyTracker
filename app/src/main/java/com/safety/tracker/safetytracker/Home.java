@@ -41,7 +41,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    Intent i = new Intent(Home.this, Settings.class);
+                    Intent i = new Intent(Home.this, PreferencesActivity.class);
                     startActivity(i);
                 } catch (Exception e) {
                     e.printStackTrace();
