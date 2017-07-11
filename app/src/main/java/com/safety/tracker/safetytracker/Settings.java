@@ -50,8 +50,8 @@ public class Settings extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener()   {
             public void onClick(View v)  {
                 try {
+                    //TODO save things
                     name.getText();
-                    
                     phoneNumber.getText();
                 } catch (Exception e) {
                     e.printStackTrace();
