@@ -10,10 +10,7 @@
         a vehicle. You, the user, are solely responsible for any situation that
         may occur while operating a vehicle and using SafetyTracker. This app
         is designed for use before and/or after operating a vehicle. Use extreme
-        caution while operating a vehicle. Always pay attention to the road and
-        please do not text and drive. It can wait.Privacy We will not provide any of your information
-        to third parties. Your information is solely used to provide you with a
-        better experience using our application.</string>
+        caution while operating a vehicle. </string>
     <string name="title_activity_preferences">Preferences</string>
 
     <!-- Strings related to Settings -->
@@ -81,9 +78,9 @@
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_Legal">Legal</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_new_message_notifications">Legal Information</string>
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
