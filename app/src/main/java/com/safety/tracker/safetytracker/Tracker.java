@@ -1,6 +1,8 @@
 package com.safety.tracker.safetytracker;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,6 +13,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,10 +50,14 @@ public class Tracker extends Activity implements SensorEventListener {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private ProgressDialog progressDialog;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracker);
+
+        ImageView backgroundImg = (ImageView) findViewById(R.id.imageView);
+        backgroundImg.setBackgroundColor(Color.rgb(255, 255, 255));
 
         calibrated = false;
         calibrationCounter = 0;
@@ -59,6 +66,8 @@ public class Tracker extends Activity implements SensorEventListener {
 
         stringbuilder = new StringBuilder();
         infractionCounter = 0;
+
+        calibrateDialogShow();
 
         sensorManager = (SensorManager) getSystemService(this.SENSOR_SERVICE);
 
@@ -85,6 +94,59 @@ public class Tracker extends Activity implements SensorEventListener {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    public void calibrateDialogShow(){
+
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please keep phone still"); // Setting Message
+        progressDialog.setTitle("Calibrating..."); // Setting Title
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL); // Progress Dialog Style Spinner
+        progressDialog.show(); // Display Progress Dialog
+        progressDialog.setCancelable(false);
+        progressDialog.setMax(100);
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    while (calibrationCounter < 100 )
+                        progressDialog.setProgress(calibrationCounter);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                progressDialog.dismiss();
+            }
+        }).start();
+/*
+        progress=new ProgressDialog(this);
+        progress.setMessage("Downloading Music");
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
+
+        final int totalProgressTime = 100;
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                int jumpTime = 0;
+
+                while(jumpTime < totalProgressTime) {
+                    try {
+                        sleep(200);
+                        jumpTime += 5;
+                        progress.setProgress(jumpTime);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        t.start();
+
+        */
     }
     private void endTripAndGenerateReport(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
