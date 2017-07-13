@@ -21,17 +21,13 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        ImageView backgroundImg = (ImageView) findViewById(R.id.imageView);
+        ImageView backgroundImg = (ImageView) findViewById(R.id.imageViewBackground);
         backgroundImg.setBackgroundColor(Color.rgb(255, 255, 255));
 
         ImageView animation = (ImageView)findViewById(R.id.imageView);
         animation.setBackgroundResource(R.drawable.run_animation);
         AnimationDrawable frameAnimation = (AnimationDrawable) animation.getBackground();
-        if(true) {
-            frameAnimation.start();
-        } else {
-            frameAnimation.stop();
-        }
+        frameAnimation.start();
 
 
 
