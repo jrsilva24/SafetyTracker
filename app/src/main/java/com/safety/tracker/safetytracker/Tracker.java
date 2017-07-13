@@ -3,6 +3,8 @@ package com.safety.tracker.safetytracker;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -11,6 +13,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +52,8 @@ public class Tracker extends Activity implements SensorEventListener {
     private int infractionCounter;
     private SensorEventListener sensorEventListener;
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private boolean infractionBuffer = false;
+    private int infractionBufferCount = 0;
 // adds 9 character string at beginning
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -158,7 +165,11 @@ public class Tracker extends Activity implements SensorEventListener {
        // openFile(summary);
         SmsManager smsManager = SmsManager.getDefault();
         askPermisions();
-        smsManager.sendTextMessage("9092007064", null, summary, null, null);
+        Context mContext = getApplicationContext();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String phone = preferences.getString("example_number", "");
+        if(phone != "8885558888")
+            smsManager.sendTextMessage(phone, null, summary, null, null);
     }
 
     private void askPermisions(){
@@ -210,9 +221,25 @@ public class Tracker extends Activity implements SensorEventListener {
     }
 
     private void analyzeValues(float x, float y, float z) {
+
+        if(infractionBuffer && infractionBufferCount < 100) {
+            infractionBufferCount++;
+            TextView forceTextThatIsInfractionNow = (TextView) findViewById(R.id.force);
+            forceTextThatIsInfractionNow.setText("Infraction!");
+            return;
+        }
+        if(infractionBuffer){
+            infractionBufferCount = 0;
+            infractionBuffer = false;
+        }
         boolean isInfraction = analyzeInfraction(x,y,z);
-        if(isInfraction)
+        if(isInfraction) {
+            infractionBuffer = true;
             registerInfraction();
+
+        }
+
+
     }
     private void registerInfraction() {
         Toast.makeText(this, "Infraction Occured!",
@@ -222,8 +249,9 @@ public class Tracker extends Activity implements SensorEventListener {
 
     private boolean analyzeInfraction(float x, float y, float z){
         force = calculateForce (x,y,z) - CalibrationValue;
+
         TextView forceText = (TextView) findViewById(R.id.force);
-        forceText.setText(force + " m/s");
+        forceText.setText(String.format("%.2f", force) + " m/s");
         return determineIfInfractionOccured(force);
     }
 
