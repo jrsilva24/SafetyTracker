@@ -1,6 +1,7 @@
 package com.safety.tracker.safetytracker;
 
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,6 +23,17 @@ public class Home extends AppCompatActivity {
 
         ImageView backgroundImg = (ImageView) findViewById(R.id.imageView);
         backgroundImg.setBackgroundColor(Color.rgb(255, 255, 255));
+
+        ImageView animation = (ImageView)findViewById(R.id.imageView);
+        animation.setBackgroundResource(R.drawable.run_animation);
+        AnimationDrawable frameAnimation = (AnimationDrawable) animation.getBackground();
+        if(true) {
+            frameAnimation.start();
+        } else {
+            frameAnimation.stop();
+        }
+
+
 
         ImageButton start = (ImageButton)findViewById(R.id.imageButton);
         start.setOnClickListener(new View.OnClickListener()   {
