@@ -1,7 +1,9 @@
 package com.safety.tracker.safetytracker;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -44,6 +46,7 @@ public class Tracker extends Activity implements SensorEventListener {
     private StringBuilder stringbuilder;
     private int infractionCounter;
     private SensorEventListener sensorEventListener;
+    private static final int PERMISSION_REQUEST_CODE = 1;
 // adds 9 character string at beginning
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -149,14 +152,30 @@ public class Tracker extends Activity implements SensorEventListener {
         */
     }
     private void endTripAndGenerateReport(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd @ HH:mm");
         String currentDateandTime = sdf.format(new Date());
-        String summary = "Total number of infractions made on " +currentDateandTime+ " were " + infractionCounter;
+        String summary = "Trip Summary : Total number of infractions made on " +currentDateandTime+ " were " + infractionCounter;
        // openFile(summary);
         SmsManager smsManager = SmsManager.getDefault();
+        askPermisions();
         smsManager.sendTextMessage("9092007064", null, summary, null, null);
     }
 
+    private void askPermisions(){
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(Manifest.permission.SEND_SMS)
+                    == PackageManager.PERMISSION_DENIED) {
+
+                Log.d("permission", "permission denied to SEND_SMS - requesting it");
+                String[] permissions = {Manifest.permission.SEND_SMS};
+
+                requestPermissions(permissions, PERMISSION_REQUEST_CODE);
+
+            }
+        }
+    }
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             final float[] accelerationVector = event.values;
