@@ -1,6 +1,7 @@
 package com.safety.tracker.safetytracker;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.content.Intent;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class Home extends AppCompatActivity {
 
@@ -29,7 +31,9 @@ public class Home extends AppCompatActivity {
         AnimationDrawable frameAnimation = (AnimationDrawable) animation.getBackground();
         frameAnimation.start();
 
-
+        TextView safetyTrackerText = (TextView) findViewById(R.id.safetyTrackerTitle);
+        Typeface type = Typeface.createFromAsset(getAssets(),"X.ttf");
+        safetyTrackerText.setTypeface(type);
 
         ImageButton start = (ImageButton)findViewById(R.id.imageButton);
         start.setOnClickListener(new View.OnClickListener()   {
